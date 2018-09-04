@@ -47,8 +47,10 @@ def playMedia(client, item, offset=None):
 
 def getEpisodeBlock(plex, library, show,blockSize=1):
     episodes = plex.library.section(library).get(show).episodes()
-    ep = random.randint(0,len(episodes))
+    ep = random.randint(1,len(episodes))
     block = []
+    if (ep > len(episodes)-blockSize):
+        ep = len(episodes)-blockSize+1
     for x in range (ep,ep+blockSize):
         block.append(episodes[x-1])
     return block
