@@ -4,12 +4,7 @@ from flask import render_template
 import re
 import sqlite3
 from sqlite3 import Error
- 
- 
-
-
-
-
+import configparser
 
 
 def create_connection(db_file):
@@ -21,10 +16,20 @@ def create_connection(db_file):
         print(e)
     finally:
         conn.close()
+
+def setupConfig():
+    config = configparser.ConfigParser()
+    config['PLEX'] = {'user': '<USER>',
+                         'password': '<PASS>',
+                         'token': '<TOKEN>',
+                         'baseurl': '<baseurl>:32400'}
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
  
 def setup_server():
     app = Flask(__name__)
-    create_connection("pythonsqlite.db")
+    create_connection("programming.db")
+    # setupConfig()
     print ("starting server")
     return app
 
