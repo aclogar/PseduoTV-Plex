@@ -1,6 +1,8 @@
 from plexapi.myplex import MyPlexAccount
 from plexapi.server import PlexServer
+from plexapi import BASE_HEADERS
 import configparser
+import random
 
 
 def getToken(user, password):
@@ -25,8 +27,36 @@ def getServer():
 def getUnwatchedMovies():
     plex = getServer()
     movies = plex.library.section('Movies')
-    for video in movies.search(unwatched=True):
-        print(video.title)
+    unwatchedMovies =  movies.search(unwatched=True)
+    # for video in unwatchedMovies:
+    #     print(video.title)
+    return unwatchedMovies
+
+def getPlayers(plex):
+    for client in plex.clients():
+        print(client.title)
+    return plex.clients()
+
+def playMedia(client, item, offset=None):
+    print('Playing: ' + item.title)
+    print ('Client: ' + client.title)
+
+    # client.goToMedia(item, **d)
+    client.playMedia(item, offset=offset)
 
 
-getUnwatchedMovies()
+def getEpisodeBlock(plex, library, show,blockSize=1):
+    episodes = plex.library.section(library).get(show).episodes()
+    ep = random.randint(0,len(episodes))
+    block = []
+    for x in range (ep,ep+blockSize):
+        block.append(episodes[x-1])
+    return block
+
+plex = getServer()
+print (getEpisodeBlock(plex, 'Anime', 'Samurai Champloo', 2))
+# client = getPlayers(plex)[0]
+# unwatched = getUnwatchedMovies()
+# item = random.choice(unwatched)
+
+# getUnwatchedMovies()
