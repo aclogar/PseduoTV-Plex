@@ -55,7 +55,18 @@ def getEpisodeBlock(plex, library, show,blockSize=1):
         block.append(episodes[x-1])
     return block
 
+def searchShow(plex, library, **params):
+    results = plex.library.section(library).searchShows(**params)
+    return results
+
+
 plex = getServer()
+searchParams = {}
+searchParams["studio"] = "Cartoon Network"
+cartoonNetwork = searchShow(plex, 'Anime', **searchParams)
+
+print (getEpisodeBlock(plex, 'Anime', cartoonNetwork[1].title, 2))
+
 print (getEpisodeBlock(plex, 'Anime', 'Samurai Champloo', 2))
 # client = getPlayers(plex)[0]
 # unwatched = getUnwatchedMovies()
