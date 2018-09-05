@@ -1,0 +1,21 @@
+{
+    "general":
+        {
+            "library": "Anime",
+            "studio": "Tokyo TV",
+            "show_block": "2"
+        }
+    ,
+    "shows": [
+        {
+            "title": "Samurai Champloo",
+            "days": "0,1,2,3,4,5,6",
+            "time": "21:00",
+            "play_order": "chrono",
+            "block_size": "2"
+        }
+    ],
+    "title": "Tokyo TV",
+    "description": "Studio TV Tokyo"
+
+}
