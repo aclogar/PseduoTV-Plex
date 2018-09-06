@@ -11,11 +11,20 @@ def create_connection(db_file):
     """ create a database connection to a SQLite database """
     try:
         conn = sqlite3.connect(db_file)
+        initialDBSetup(conn)
         print(sqlite3.version)
     except Error as e:
         print(e)
     finally:
         conn.close()
+
+def initialDBSetup(conn):
+    sql_channel = 'CREATE TABLE IF NOT EXISTS `CHANNEL` ( `TITLE` TEXT, `DESCRIPTION` TEXT, `PARAMS` BLOB, `LOGO` TEXT )'
+    sql_episode = 'CREATE TABLE IF NOT EXISTS `EPISODES` ( `ID` NUMERIC NOT NULL, `TITLE` TEXT, `DESCRIPTION` TEXT, `SHOW_TITLE` TEXT, `EPISODE_NUM` INTEGER, `START_TIME` INTEGER, `DURATION` INTEGER, PRIMARY KEY(`ID`) )'
+    c = conn.cursor()
+    c.execute(sql_channel)
+    c.execute(sql_episode)
+    conn.commit()
 
 def setupConfig():
     config = configparser.ConfigParser()

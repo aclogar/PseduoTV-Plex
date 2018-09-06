@@ -3,6 +3,8 @@ from plexapi.server import PlexServer
 from plexapi import BASE_HEADERS
 import configparser
 import random
+from channel import Channel
+import os
 
 
 def getToken(user, password):
@@ -47,14 +49,42 @@ def playMedia(client, item, offset=None):
 
 def getEpisodeBlock(plex, library, show,blockSize=1):
     episodes = plex.library.section(library).get(show).episodes()
-    ep = random.randint(0,len(episodes))
+    ep = random.randint(1,len(episodes))
     block = []
+    if (ep > len(episodes)-blockSize):
+        ep = len(episodes)-blockSize+1
     for x in range (ep,ep+blockSize):
         block.append(episodes[x-1])
     return block
 
+def searchShow( plex, library, **params):
+    # library = params["library"]
+    results = plex.library.section(library).searchShows(**params)
+    return results
+
+
 plex = getServer()
-print (getEpisodeBlock(plex, 'Anime', 'Samurai Champloo', 2))
+searchParams = {}
+searchParams["studio"] = "TV Tokyo"
+channel = searchShow(plex, 'Anime', **searchParams)
+
+indir = 'channels'
+for root, dirs, filenames in os.walk(indir):
+    for f in filenames:
+        channel = Channel(indir+'/' +f)
+        searchParams = {}
+        searchParams = channel.getGeneralParams()
+        library = searchParams['library']
+        del searchParams["library"]
+        del searchParams["show_block"]
+        show = searchShow(plex, library, **searchParams)
+        print ("Channel: %s\nDescription: %s" % (channel.title, channel.description))
+
+
+
+# print (getEpisodeBlock(plex, 'Anime', channel[1].title, 2))
+
+# print (getEpisodeBlock(plex, 'Anime', 'Samurai Champloo', 2))
 # client = getPlayers(plex)[0]
 # unwatched = getUnwatchedMovies()
 # item = random.choice(unwatched)
