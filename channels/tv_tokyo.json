@@ -2,8 +2,8 @@
     "general":
         {
             "library": "Anime",
-            "studio": "Tokyo TV",
-            "show_block": "2"
+            "studio": "TV Tokyo",
+            "show_block": 2
         }
     ,
     "shows": [

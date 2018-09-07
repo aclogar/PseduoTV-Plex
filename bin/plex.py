@@ -18,7 +18,7 @@ def getServerUser(user, password, serverName):
 
 def getServer():
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('config.2.ini')
 
     baseurl = config['DEFAULT']['baseUrl']
     token = config['DEFAULT']['token']
@@ -64,21 +64,29 @@ def searchShow( plex, library, **params):
 
 
 plex = getServer()
-searchParams = {}
-searchParams["studio"] = "TV Tokyo"
-channel = searchShow(plex, 'Anime', **searchParams)
+# searchParams = {}
+# searchParams["studio"] = "TV Tokyo"
+# channel = searchShow(plex, 'Anime', **searchParams)
 
 indir = 'channels'
 for root, dirs, filenames in os.walk(indir):
     for f in filenames:
         channel = Channel(indir+'/' +f)
         searchParams = {}
-        searchParams = channel.getGeneralParams()
-        library = searchParams['library']
-        del searchParams["library"]
-        del searchParams["show_block"]
-        show = searchShow(plex, library, **searchParams)
+        genParams = channel.getGeneralParams()
+        for d in genParams:
+            if d != 'library' and d != 'show_block':
+                searchParams[d] = genParams[d]
+        # library = searchParams['library']
+        # del searchParams["library"]
+        # del searchParams["show_block"]
+        shows = searchShow(plex, genParams['library'], **searchParams)
+        show = shows[random.randint(0,len(shows)-1)]
+        episodes = getEpisodeBlock(plex,genParams['library'],show.title,genParams['show_block'])
+        print (episodes)
         print ("Channel: %s\nDescription: %s" % (channel.title, channel.description))
+        for e in episodes:
+            print ("%s %s: %s\n%s\n" % (e.grandparentTitle, e.seasonEpisode, e.title, e.summary))
 
 
 
