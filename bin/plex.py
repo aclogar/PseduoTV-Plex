@@ -2,8 +2,7 @@ from plexapi.myplex import MyPlexAccount
 from plexapi.server import PlexServer
 from plexapi import BASE_HEADERS
 import configparser
-import random
-from channel import Channel
+# from channel import Channel
 import os
 
 
@@ -18,7 +17,7 @@ def getServerUser(user, password, serverName):
 
 def getServer():
     config = configparser.ConfigParser()
-    config.read('config.2.ini')
+    config.read('config.ini')
 
     baseurl = config['DEFAULT']['baseUrl']
     token = config['DEFAULT']['token']
@@ -48,6 +47,7 @@ def playMedia(client, item, offset=None):
 
 
 def getEpisodeBlock(plex, library, show,blockSize=1):
+    import random
     episodes = plex.library.section(library).get(show).episodes()
     ep = random.randint(1,len(episodes))
     block = []
@@ -62,31 +62,6 @@ def searchShow( plex, library, **params):
     results = plex.library.section(library).searchShows(**params)
     return results
 
-
-plex = getServer()
-# searchParams = {}
-# searchParams["studio"] = "TV Tokyo"
-# channel = searchShow(plex, 'Anime', **searchParams)
-
-indir = 'channels'
-for root, dirs, filenames in os.walk(indir):
-    for f in filenames:
-        channel = Channel(indir+'/' +f)
-        searchParams = {}
-        genParams = channel.getGeneralParams()
-        for d in genParams:
-            if d != 'library' and d != 'show_block':
-                searchParams[d] = genParams[d]
-        # library = searchParams['library']
-        # del searchParams["library"]
-        # del searchParams["show_block"]
-        shows = searchShow(plex, genParams['library'], **searchParams)
-        show = shows[random.randint(0,len(shows)-1)]
-        episodes = getEpisodeBlock(plex,genParams['library'],show.title,genParams['show_block'])
-        print (episodes)
-        print ("Channel: %s\nDescription: %s" % (channel.title, channel.description))
-        for e in episodes:
-            print ("%s %s: %s\n%s\n" % (e.grandparentTitle, e.seasonEpisode, e.title, e.summary))
 
 
 

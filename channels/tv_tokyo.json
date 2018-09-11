@@ -1,7 +1,6 @@
 {
     "general":
         {
-            "library": "Anime",
             "studio": "TV Tokyo",
             "show_block": 2
         }
@@ -16,6 +15,8 @@
         }
     ],
     "title": "Tokyo TV",
-    "description": "Studio TV Tokyo"
+    "description": "Studio TV Tokyo",
+    "type": "tv",
+    "library": "Anime"
 
 }
