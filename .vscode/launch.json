@@ -11,6 +11,12 @@
             "program": "${file}"
         },
         {
+            "name": "Python: Test File",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/test.py"
+        },
+        {
             "name": "Python: Attach",
             "type": "python",
             "request": "attach",

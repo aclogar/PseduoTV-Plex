@@ -1,0 +1,13 @@
+{
+    "general":
+        {
+            "genre": "action"
+        }
+    ,
+    "title": "Christmas with the Logars",
+    "description": "Deck the hall with bell of sarcasm",
+    "type": "movie",
+    "plot": "christmas",
+    "library": "Movies,Anime,TV Shows"
+
+}
